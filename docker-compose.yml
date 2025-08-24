@@ -33,6 +33,26 @@ services:
             - ./db:/usr/src/app/db
         depends_on:
             - redis
+        api:
+    <<: *common-service
+    build:
+        context: .
+        dockerfile: apps/api/Dockerfile
+        target: api
+    environment:
+        <<: *common-env
+    ports:
+        - "8081:8080"
+    volumes:
+        - ./storage:/usr/src/app/storage
+        - ./db:/usr/src/app/db
+    depends_on:
+        - redis
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.anycrawl-api.rule=Host(`anycrawl.fmx`)"
+        - "traefik.http.routers.anycrawl-api.entrypoints=web"
+        - "traefik.http.services.anycrawl-api.loadbalancer.server.port=8080"
 
     scrape-puppeteer:
         <<: *common-service
