@@ -42,7 +42,7 @@ services:
     environment:
         <<: *common-env
     ports:
-        - "8081:8080"
+        - "8080:8080"
     volumes:
         - ./storage:/usr/src/app/storage
         - ./db:/usr/src/app/db
