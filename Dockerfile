@@ -73,6 +73,7 @@ ENV ANYCRAWL_API_DB_CONNECTION=/usr/src/app/storage/anycrawl.db
 ENV ANYCRAWL_API_PORT=8080
 ENV ANYCRAWL_API_AUTH_ENABLED=false
 ENV REDIS_URL=redis://localhost:6379
+ENV CRAWLEE_STORAGE_DIR=/usr/src/app/storage
 
 # Create engine configuration script (disable puppeteer on non-amd64)
 RUN if [ "$ENABLE_PUPPETEER" = "true" ] && [ "$TARGETARCH" = "amd64" ]; then \
@@ -140,10 +141,17 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Copy and setup API startup script
 COPY docker/start-api.sh /usr/src/app/start-api.sh
 RUN chmod +x /usr/src/app/start-api.sh && \
-mkdir -p /usr/src/app/storage
+mkdir -p /usr/src/app/storage/key_value_stores /usr/src/app/storage/datasets /usr/src/app/storage/request_queues
+
+# Create user and fix permissions
+RUN groupadd -r anycrawl && useradd -r -g anycrawl anycrawl && \
+    chown -R anycrawl:anycrawl /usr/src/app
 
 # Set working directory
 WORKDIR /usr/src/app
+
+# Switch to non-root user
+USER anycrawl
 
 # Expose ports
 EXPOSE 8080
