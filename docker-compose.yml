@@ -26,29 +26,13 @@ services:
             target: api
         environment:
             <<: *common-env
+        ports:
+            - "8080:8080"
         volumes:
             - ./storage:/usr/src/app/storage
             - ./db:/usr/src/app/db
         depends_on:
             - redis
-        api:
-    <<: *common-service
-    build:
-        context: .
-        dockerfile: apps/api/Dockerfile
-        target: api
-    environment:
-        <<: *common-env
-    ports:
-        - "8080:8080"
-    volumes:
-        - ./storage:/usr/src/app/storage
-        - ./db:/usr/src/app/db
-    depends_on:
-        - redis
-     expose:
-        - "8080"
-    
 
     scrape-puppeteer:
         <<: *common-service
