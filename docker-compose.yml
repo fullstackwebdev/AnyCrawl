@@ -50,9 +50,8 @@ services:
         - redis
     labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.anycrawl-api.rule=Host(`anycrawl.fmx`)"
-        - "traefik.http.routers.anycrawl-api.entrypoints=web"
-        - "traefik.http.services.anycrawl-api.loadbalancer.server.port=8080"
+        - "traefik.http.routers.anycrawl.rule=Host(`anycrawl.fmx`)"
+        - "traefik.http.services.anycrawl.loadbalancer.server.port=8080"
 
     scrape-puppeteer:
         <<: *common-service
