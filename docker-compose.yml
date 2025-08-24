@@ -26,8 +26,6 @@ services:
             target: api
         environment:
             <<: *common-env
-        ports:
-            - "8081:8080"
         volumes:
             - ./storage:/usr/src/app/storage
             - ./db:/usr/src/app/db
@@ -48,10 +46,9 @@ services:
         - ./db:/usr/src/app/db
     depends_on:
         - redis
-    labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.anycrawl.rule=Host(`anycrawl.fmx`)"
-        - "traefik.http.services.anycrawl.loadbalancer.server.port=8080"
+     expose:
+        - "8080"
+    
 
     scrape-puppeteer:
         <<: *common-service
